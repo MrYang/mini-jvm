@@ -1,8 +1,7 @@
 package com.zz.parser;
 
-import com.zz.parser.attribute.Attribute;
-import com.zz.parser.attribute.Code;
-import com.zz.parser.attribute.ExceptionTable;
+import com.zz.parser.attribute.*;
+import com.zz.parser.constant.ConstantUtf8;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -35,5 +34,32 @@ public class Method extends FieldOrMethod {
         }
 
         return null;
+    }
+
+    public LocalVariableTable getLocalVariableTable() {
+        Code code = getCode();
+        if (code != null) {
+            return code.getLocalVariableTable();
+        }
+
+        return null;
+    }
+
+    public LineNumberTable getLineNumberTable() {
+        Code code = getCode();
+        if (code != null) {
+            return code.getLineNumberTable();
+        }
+
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        String access = Utility.accessToString(access_flags);
+        ConstantUtf8 c = (ConstantUtf8) constant_pool.getConstant(signature_index, Constants.CONSTANT_Utf8);
+        String signature = c.getBytes();
+
+        return "";
     }
 }

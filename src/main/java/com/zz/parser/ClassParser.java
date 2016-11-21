@@ -42,7 +42,7 @@ public class ClassParser {
 
         return new JavaClass(class_name_index, superclass_name_index,
                 file_name, major, minor, access_flags, constant_pool,
-                interfaces, fields, methods,attributes);
+                interfaces, fields, methods, attributes);
     }
 
     private void readID() throws IOException {
@@ -81,7 +81,7 @@ public class ClassParser {
     private void readInterfaces() throws IOException {
         int interfaces_count = file.readUnsignedShort();
         interfaces = new int[interfaces_count];
-        for(int i=0; i < interfaces_count; i++) {
+        for (int i = 0; i < interfaces_count; i++) {
             interfaces[i] = file.readUnsignedShort();
         }
     }

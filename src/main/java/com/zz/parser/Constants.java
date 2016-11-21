@@ -9,14 +9,21 @@ public class Constants {
     public final static byte CONSTANT_Long               = 5;
     public final static byte CONSTANT_Double             = 6;
     public final static byte CONSTANT_Class              = 7;
-    public final static byte CONSTANT_Fieldref           = 9;
     public final static byte CONSTANT_String             = 8;
+    public final static byte CONSTANT_Fieldref           = 9;
     public final static byte CONSTANT_Methodref          = 10;
     public final static byte CONSTANT_InterfaceMethodref = 11;
     public final static byte CONSTANT_NameAndType        = 12;
     public final static byte CONSTANT_MethodHandle_info  = 15;
     public final static byte CONSTANT_MethodType_info    = 16;
     public final static byte CONSTANT_InvokeDynamic_info = 18;
+
+    public final static String[] CONSTANT_NAMES = {
+            "", "CONSTANT_Utf8", "", "CONSTANT_Integer",
+            "CONSTANT_Float", "CONSTANT_Long", "CONSTANT_Double",
+            "CONSTANT_Class", "CONSTANT_String", "CONSTANT_Fieldref",
+            "CONSTANT_Methodref", "CONSTANT_InterfaceMethodref",
+            "CONSTANT_NameAndType" };
 
 
     // 访问标志
@@ -35,6 +42,16 @@ public class Constants {
     public final static short ACC_ABSTRACT     = 0x0400;
     public final static short ACC_STRICT       = 0x0800;
 
+
+    public final static short MAX_ACC_FLAG     = ACC_STRICT;
+
+    // Applies to classes compiled by new compilers only
+    public final static short ACC_SUPER        = 0x0020;
+
+    public final static String[] ACCESS_NAMES = {
+            "public", "private", "protected", "static", "final", "synchronized",
+            "volatile", "transient", "native", "interface", "abstract", "strictfp"
+    };
 
     // 属性表
     public static final byte ATTR_UNKNOWN                                 = -1;

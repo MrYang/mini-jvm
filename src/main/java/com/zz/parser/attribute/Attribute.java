@@ -1,6 +1,7 @@
 package com.zz.parser.attribute;
 
 
+import com.zz.parser.ClassParseException;
 import com.zz.parser.ConstantPool;
 import com.zz.parser.Constants;
 import com.zz.parser.constant.ConstantUtf8;
@@ -69,7 +70,7 @@ public abstract class Attribute {
             case Constants.ATTR_STACK_MAP:
                 return new StackMap(name_index, length, file, constant_pool);
             default:
-                throw new IllegalStateException("Ooops! default case reached.");
+                throw new ClassParseException("Ooops! default case reached.");
         }
     }
 }

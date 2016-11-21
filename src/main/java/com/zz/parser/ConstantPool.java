@@ -30,7 +30,7 @@ public class ConstantPool {
 
     public Constant getConstant(int index) {
         if (index >= constant_pool.length || index < 0) {
-            throw new RuntimeException("constant_pool index error");
+            throw new ClassParseException("constant_pool index error");
         }
         return constant_pool[index];
     }
@@ -39,17 +39,17 @@ public class ConstantPool {
         Constant c = getConstant(index);
 
         if (c == null) {
-            throw new RuntimeException("get constant error");
+            throw new ClassParseException("get constant error");
         }
 
         if (c.getTag() == tag) {
             return c;
         }
 
-        throw new RuntimeException("tag error");
+        throw new ClassParseException("tag error");
     }
 
-    public String getConstatnString(int index, byte tag) {
+    public String getConstantString(int index, byte tag) {
         Constant c = getConstant(index, tag);
         int idx;
         switch (tag) {
@@ -60,10 +60,14 @@ public class ConstantPool {
                 idx = ((ConstantString)c).getStringIndex();
                 break;
             default:
-                throw new RuntimeException("getConstantString called with illegal tag " + tag);
+                throw new ClassParseException("getConstantString called with illegal tag " + tag);
         }
 
         c = getConstant(idx, Constants.CONSTANT_Utf8);
         return ((ConstantUtf8)c).getBytes();
+    }
+
+    public int length() {
+        return constant_pool_count;
     }
 }

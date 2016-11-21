@@ -19,15 +19,6 @@ public class StackMap extends Attribute {
 
     }
 
-    /**
-     * Construct object from file stream.
-     *
-     * @param name_index    Index of name
-     * @param length        Content length in bytes
-     * @param file          Input stream
-     * @param constant_pool Array of constants
-     * @throws IOException
-     */
     StackMap(int name_index, int length, DataInputStream file,
              ConstantPool constant_pool) throws IOException {
         this(name_index, length, constant_pool);
@@ -88,10 +79,6 @@ class StackMapType {
         this.constant_pool = constant_pool;
     }
 
-    /**
-     * @param type  type tag as defined in the Constants interface
-     * @param index index to constant pool, or byte code offset
-     */
     public StackMapType(byte type, int index) {
         this.type = type;
         this.index = index;

@@ -1,5 +1,8 @@
 package com.zz.parser.constant;
 
+import com.zz.parser.ClassParseException;
+import com.zz.parser.Constants;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -28,7 +31,7 @@ public abstract class Constant {
             case CONSTANT_Methodref: return new ConstantMethodref(file);
             case CONSTANT_InterfaceMethodref: return new ConstantInterfaceMethodref(file);
             case CONSTANT_NameAndType: return new ConstantNameAndType(file);
-            default: throw new RuntimeException("invalid tag:" + b);
+            default: throw new ClassParseException("invalid tag:" + b);
         }
     }
 
@@ -36,4 +39,9 @@ public abstract class Constant {
         return tag;
     }
 
+
+    @Override
+    public String toString() {
+        return Constants.CONSTANT_NAMES[tag] + "[" + tag + "]";
+    }
 }
