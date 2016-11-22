@@ -23,7 +23,7 @@ public class ConstantClass extends Constant {
         return ((ConstantUtf8)c).getBytes();
     }
 
-    public int getName_index() {
+    public int getNameIndex() {
         return name_index;
     }
 

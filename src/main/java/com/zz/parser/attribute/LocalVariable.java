@@ -1,6 +1,8 @@
 package com.zz.parser.attribute;
 
 import com.zz.parser.ConstantPool;
+import com.zz.parser.Constants;
+import com.zz.parser.Utility;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -29,5 +31,40 @@ public class LocalVariable {
         this.signature_index = signature_index;
         this.index = index;
         this.constant_pool = constant_pool;
+    }
+
+    public int getStartPc() {
+        return start_pc;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public int getNameIndex() {
+        return name_index;
+    }
+
+    public int getSignatureIndex() {
+        return signature_index;
+    }
+
+    public String getSignature() {
+        return constant_pool.getConstantString(signature_index, Constants.CONSTANT_Utf8);
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public String getName() {
+        return constant_pool.getConstantString(name_index, Constants.CONSTANT_Utf8);
+    }
+
+    public final String toString() {
+        String name = getName(), signature = Utility.signatureToString(getSignature());
+
+        return "LocalVariable(start_pc = " + start_pc + ", length = " + length +
+                ", index = " + index + ":" + signature + " " + name + ")";
     }
 }

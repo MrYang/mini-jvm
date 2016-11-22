@@ -28,6 +28,29 @@ public class LineNumberTable extends Attribute {
         }
     }
 
+
+    public final String toString() {
+        StringBuilder buf = new StringBuilder();
+        StringBuilder line = new StringBuilder();
+
+        for (int i = 0; i < line_number_table_length; i++) {
+            line.append(line_number_table[i].toString());
+
+            if (i < line_number_table_length - 1) {
+                line.append(", ");
+            }
+
+            if (line.length() > 72) {
+                line.append('\n');
+                buf.append(line);
+                line.setLength(0);
+            }
+        }
+
+        buf.append(line);
+
+        return buf.toString();
+    }
 }
 
 class LineNumber {

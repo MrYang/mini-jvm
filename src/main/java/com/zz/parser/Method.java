@@ -1,7 +1,10 @@
 package com.zz.parser;
 
-import com.zz.parser.attribute.*;
-import com.zz.parser.constant.ConstantUtf8;
+import com.zz.parser.attribute.Attribute;
+import com.zz.parser.attribute.Code;
+import com.zz.parser.attribute.ExceptionTable;
+import com.zz.parser.attribute.LineNumberTable;
+import com.zz.parser.attribute.LocalVariableTable;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -15,7 +18,7 @@ public class Method extends FieldOrMethod {
     }
 
     public Code getCode() {
-        Optional<Attribute> optional =  Arrays.stream(attributes)
+        Optional<Attribute> optional = Arrays.stream(attributes)
                 .filter(attribute -> attribute instanceof Code)
                 .findFirst();
         if (optional.isPresent()) {
@@ -26,7 +29,7 @@ public class Method extends FieldOrMethod {
     }
 
     public ExceptionTable getExceptionTable() {
-        Optional<Attribute> optional =  Arrays.stream(attributes)
+        Optional<Attribute> optional = Arrays.stream(attributes)
                 .filter(attribute -> attribute instanceof ExceptionTable)
                 .findFirst();
         if (optional.isPresent()) {
@@ -57,9 +60,26 @@ public class Method extends FieldOrMethod {
     @Override
     public String toString() {
         String access = Utility.accessToString(access_flags);
-        ConstantUtf8 c = (ConstantUtf8) constant_pool.getConstant(signature_index, Constants.CONSTANT_Utf8);
-        String signature = c.getBytes();
+        String signature = constant_pool.constantToString(signature_index, Constants.CONSTANT_Utf8);
+        String name = constant_pool.constantToString(name_index, Constants.CONSTANT_Utf8);
+        StringBuilder buf = new StringBuilder(Utility.methodSignatureToString(signature, name, access));
 
-        return "";
+        for(int i=0; i < attributes_count; i++) {
+            Attribute a = attributes[i];
+
+            if(!((a instanceof Code) || (a instanceof ExceptionTable))) {
+                buf.append(" [" + a.toString() + "]");
+            }
+        }
+
+        ExceptionTable e = getExceptionTable();
+        if(e != null) {
+            String str = e.toString();
+            if(!str.equals("")) {
+                buf.append("\n\t\tthrows " + str);
+            }
+        }
+
+        return buf.toString();
     }
 }

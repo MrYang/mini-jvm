@@ -1,9 +1,6 @@
 package com.zz.parser;
 
-import com.zz.parser.constant.Constant;
-import com.zz.parser.constant.ConstantClass;
-import com.zz.parser.constant.ConstantString;
-import com.zz.parser.constant.ConstantUtf8;
+import com.zz.parser.constant.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -54,20 +51,108 @@ public class ConstantPool {
         int idx;
         switch (tag) {
             case Constants.CONSTANT_Class:
-                idx = ((ConstantClass)c).getName_index();
+                idx = ((ConstantClass) c).getNameIndex();
                 break;
             case Constants.CONSTANT_String:
-                idx = ((ConstantString)c).getStringIndex();
+                idx = ((ConstantString) c).getStringIndex();
                 break;
             default:
                 throw new ClassParseException("getConstantString called with illegal tag " + tag);
         }
 
         c = getConstant(idx, Constants.CONSTANT_Utf8);
-        return ((ConstantUtf8)c).getBytes();
+        return ((ConstantUtf8) c).getBytes();
+    }
+
+    public String constantToString(Constant c) throws ClassParseException {
+        String str;
+        int idx;
+        byte tag = c.getTag();
+
+        switch (tag) {
+            case Constants.CONSTANT_Class:
+                idx = ((ConstantClass) c).getNameIndex();
+                c = getConstant(idx, Constants.CONSTANT_Utf8);
+                str = Utility.compactClassName(((ConstantUtf8) c).getBytes(), false);
+                break;
+
+            case Constants.CONSTANT_String:
+                idx = ((ConstantString) c).getStringIndex();
+                c = getConstant(idx, Constants.CONSTANT_Utf8);
+                str = "\"" + escape(((ConstantUtf8) c).getBytes()) + "\"";
+                break;
+
+            case Constants.CONSTANT_Utf8:
+                str = ((ConstantUtf8) c).getBytes();
+                break;
+            case Constants.CONSTANT_Double:
+                str = "" + ((ConstantDouble) c).getBytes();
+                break;
+            case Constants.CONSTANT_Float:
+                str = "" + ((ConstantFloat) c).getBytes();
+                break;
+            case Constants.CONSTANT_Long:
+                str = "" + ((ConstantLong) c).getBytes();
+                break;
+            case Constants.CONSTANT_Integer:
+                str = "" + ((ConstantInteger) c).getBytes();
+                break;
+
+            case Constants.CONSTANT_NameAndType:
+                str = constantToString(((ConstantNameAndType) c).getNameIndex(), Constants.CONSTANT_Utf8) + " " +
+                        constantToString(((ConstantNameAndType) c).getSignatureIndex(), Constants.CONSTANT_Utf8);
+                break;
+
+            case Constants.CONSTANT_InterfaceMethodref:
+            case Constants.CONSTANT_Methodref:
+            case Constants.CONSTANT_Fieldref:
+                str = constantToString(((ConstantCP) c).getClassIndex(), Constants.CONSTANT_Class) + "." +
+                        constantToString(((ConstantCP) c).getNameAndTypeIndex(), Constants.CONSTANT_NameAndType);
+                break;
+
+            default: // Never reached
+                throw new RuntimeException("Unknown constant type " + tag);
+        }
+
+        return str;
+    }
+
+    public String constantToString(int index, byte tag) throws ClassParseException {
+        Constant c = getConstant(index, tag);
+        return constantToString(c);
     }
 
     public int length() {
         return constant_pool_count;
+    }
+
+    private static String escape(String str) {
+        int len = str.length();
+        StringBuilder buf = new StringBuilder(len + 5);
+        char[] ch = str.toCharArray();
+
+        for (int i = 0; i < len; i++) {
+            switch (ch[i]) {
+                case '\n':
+                    buf.append("\\n");
+                    break;
+                case '\r':
+                    buf.append("\\r");
+                    break;
+                case '\t':
+                    buf.append("\\t");
+                    break;
+                case '\b':
+                    buf.append("\\b");
+                    break;
+                case '"':
+                    buf.append("\\\"");
+                    break;
+                default:
+                    buf.append(ch[i]);
+            }
+        }
+
+        return buf.toString();
     }
 }
