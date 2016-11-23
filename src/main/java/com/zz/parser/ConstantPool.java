@@ -29,6 +29,7 @@ public class ConstantPool {
         if (index >= constant_pool.length || index < 0) {
             throw new ClassParseException("constant_pool index error");
         }
+
         return constant_pool[index];
     }
 
@@ -64,7 +65,7 @@ public class ConstantPool {
         return ((ConstantUtf8) c).getBytes();
     }
 
-    public String constantToString(Constant c) throws ClassParseException {
+    private String constantToString(Constant c) throws ClassParseException {
         String str;
         int idx;
         byte tag = c.getTag();
@@ -75,13 +76,11 @@ public class ConstantPool {
                 c = getConstant(idx, Constants.CONSTANT_Utf8);
                 str = Utility.compactClassName(((ConstantUtf8) c).getBytes(), false);
                 break;
-
             case Constants.CONSTANT_String:
                 idx = ((ConstantString) c).getStringIndex();
                 c = getConstant(idx, Constants.CONSTANT_Utf8);
                 str = "\"" + escape(((ConstantUtf8) c).getBytes()) + "\"";
                 break;
-
             case Constants.CONSTANT_Utf8:
                 str = ((ConstantUtf8) c).getBytes();
                 break;
@@ -97,21 +96,52 @@ public class ConstantPool {
             case Constants.CONSTANT_Integer:
                 str = "" + ((ConstantInteger) c).getBytes();
                 break;
-
             case Constants.CONSTANT_NameAndType:
-                str = constantToString(((ConstantNameAndType) c).getNameIndex(), Constants.CONSTANT_Utf8) + " " +
+                str = constantToString(((ConstantNameAndType) c).getNameIndex(), Constants.CONSTANT_Utf8) + ":" +
                         constantToString(((ConstantNameAndType) c).getSignatureIndex(), Constants.CONSTANT_Utf8);
                 break;
-
             case Constants.CONSTANT_InterfaceMethodref:
             case Constants.CONSTANT_Methodref:
             case Constants.CONSTANT_Fieldref:
                 str = constantToString(((ConstantCP) c).getClassIndex(), Constants.CONSTANT_Class) + "." +
                         constantToString(((ConstantCP) c).getNameAndTypeIndex(), Constants.CONSTANT_NameAndType);
                 break;
+            case Constants.CONSTANT_MethodHandle:
+                ConstantMethodHandler constantMethodHandler = (ConstantMethodHandler) c;
+                int reference_kind = constantMethodHandler.getReferenceKind();
+                int reference_index = constantMethodHandler.getReferenceIndex();
+                switch (reference_kind) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        str = constantToString(reference_index, Constants.CONSTANT_Fieldref);
+                        break;
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        str = constantToString(reference_index, Constants.CONSTANT_Methodref);
+                        break;
+                    case 9:
+                        str = constantToString(reference_index, Constants.CONSTANT_InterfaceMethodref);
+                        break;
+                    default:
+                        throw new ClassParseException("invalid reference kind:" + reference_kind);
+                }
+                break;
+            case Constants.CONSTANT_MethodType:
+                str = constantToString(((ConstantMethodType) c).getDescriptorIndex(), Constants.CONSTANT_Utf8);
+                break;
+            case Constants.CONSTANT_InvokeDynamic:
+                ConstantInvokeDynamic constantInvokeDynamic = (ConstantInvokeDynamic) c;
+                int attrIdx = constantInvokeDynamic.getBootstrapMethodAttrIndex();
+                str = "bootstrap_methods[" + attrIdx + "]:" +
+                        constantToString(constantInvokeDynamic.getNameAndTypeIndex(), Constants.CONSTANT_NameAndType);
+                break;
 
-            default: // Never reached
-                throw new RuntimeException("Unknown constant type " + tag);
+            default:
+                throw new ClassParseException("Unknown constant type " + tag);
         }
 
         return str;
@@ -126,7 +156,7 @@ public class ConstantPool {
         return constant_pool_count;
     }
 
-    private static String escape(String str) {
+    private String escape(String str) {
         int len = str.length();
         StringBuilder buf = new StringBuilder(len + 5);
         char[] ch = str.toCharArray();

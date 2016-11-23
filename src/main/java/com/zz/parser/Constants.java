@@ -14,16 +14,17 @@ public class Constants {
     public final static byte CONSTANT_Methodref          = 10;
     public final static byte CONSTANT_InterfaceMethodref = 11;
     public final static byte CONSTANT_NameAndType        = 12;
-    public final static byte CONSTANT_MethodHandle_info  = 15;
-    public final static byte CONSTANT_MethodType_info    = 16;
-    public final static byte CONSTANT_InvokeDynamic_info = 18;
+    public final static byte CONSTANT_MethodHandle       = 15;
+    public final static byte CONSTANT_MethodType         = 16;
+    public final static byte CONSTANT_InvokeDynamic      = 18;
 
     public final static String[] CONSTANT_NAMES = {
             "", "CONSTANT_Utf8", "", "CONSTANT_Integer",
             "CONSTANT_Float", "CONSTANT_Long", "CONSTANT_Double",
             "CONSTANT_Class", "CONSTANT_String", "CONSTANT_Fieldref",
             "CONSTANT_Methodref", "CONSTANT_InterfaceMethodref",
-            "CONSTANT_NameAndType" };
+            "CONSTANT_NameAndType", "CONSTANT_MethodHandle",
+            "CONSTANT_MethodType", "CONSTANT_InvokeDynamic"};
 
 
     // 访问标志

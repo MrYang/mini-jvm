@@ -10,12 +10,8 @@ public class ConstantFloat extends Constant {
     private float bytes;
 
     public ConstantFloat(DataInputStream file) throws IOException {
-        this(file.readFloat());
-    }
-
-    public ConstantFloat(float bytes) {
         super(Constants.CONSTANT_Float);
-        this.bytes = bytes;
+        this.bytes = file.readFloat();
     }
 
     public float getBytes() {

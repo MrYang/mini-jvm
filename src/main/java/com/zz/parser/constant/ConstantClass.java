@@ -10,17 +10,12 @@ public class ConstantClass extends Constant {
     private int name_index;
 
     public ConstantClass(DataInputStream file) throws IOException {
-        this(file.readUnsignedShort());
-    }
-
-    public ConstantClass(int name_index) {
         super(Constants.CONSTANT_Class);
-        this.name_index = name_index;
+        this.name_index = file.readUnsignedShort();
     }
 
-    public String getConstantValue(ConstantPool cp) {
-        Constant c = cp.getConstant(name_index, Constants.CONSTANT_Utf8);
-        return ((ConstantUtf8)c).getBytes();
+    public String getConstantValue(ConstantPool constant_pool) {
+        return constant_pool.constantToString(name_index, Constants.CONSTANT_Utf8);
     }
 
     public int getNameIndex() {

@@ -31,10 +31,9 @@ public abstract class Constant {
             case CONSTANT_Methodref: return new ConstantMethodref(file);
             case CONSTANT_InterfaceMethodref: return new ConstantInterfaceMethodref(file);
             case CONSTANT_NameAndType: return new ConstantNameAndType(file);
-            case CONSTANT_MethodHandle_info:
-            case CONSTANT_MethodType_info:
-            case CONSTANT_InvokeDynamic_info:
-                throw new ClassParseException("稍等一下,还没实现");
+            case CONSTANT_MethodHandle: return new ConstantMethodHandler(file);
+            case CONSTANT_MethodType: return new ConstantMethodType(file);
+            case CONSTANT_InvokeDynamic: return new ConstantInvokeDynamic(file);
             default: throw new ClassParseException("invalid tag:" + b);
         }
     }
@@ -42,7 +41,6 @@ public abstract class Constant {
     public byte getTag() {
         return tag;
     }
-
 
     @Override
     public String toString() {

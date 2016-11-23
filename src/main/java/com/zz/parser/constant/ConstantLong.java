@@ -10,13 +10,9 @@ public class ConstantLong extends Constant {
 
     private long bytes;
 
-    public ConstantLong(long bytes) {
-        super(Constants.CONSTANT_Long);
-        this.bytes = bytes;
-    }
-
     public ConstantLong(DataInputStream file) throws IOException {
-        this(file.readLong());
+        super(Constants.CONSTANT_Long);
+        this.bytes = file.readLong();
     }
 
     public long getBytes() {

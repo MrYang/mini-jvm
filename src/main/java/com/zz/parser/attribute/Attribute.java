@@ -28,7 +28,7 @@ public abstract class Attribute {
         String name = constant_pool.constantToString(name_index, Constants.CONSTANT_Utf8);
         int length = file.readInt();
 
-        // Compare strings to find known attribute
+        // 对比属性,根据属性名称找到索引,然后case 索引, 可以考虑改下
         for (byte i = 0; i < Constants.KNOWN_ATTRIBUTES; i++) {
             if (name.equals(Constants.ATTRIBUTE_NAMES[i])) {
                 tag = i;
@@ -36,7 +36,6 @@ public abstract class Attribute {
             }
         }
 
-        // Call proper constructor, depending on `tag'
         switch (tag) {
             case Constants.ATTR_UNKNOWN:
                 return new Unknown(name_index, length, file, constant_pool);

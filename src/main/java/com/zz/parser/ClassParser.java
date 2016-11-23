@@ -48,7 +48,7 @@ public class ClassParser {
     private void readID() throws IOException {
         int magic = 0xCAFEBABE;
         if (file.readInt() != magic) {
-            throw new RuntimeException("not class file");
+            throw new ClassParseException("not class file");
         }
     }
 
@@ -71,7 +71,7 @@ public class ClassParser {
 
         if (((access_flags & Constants.ACC_ABSTRACT) != 0) &&
                 ((access_flags & Constants.ACC_FINAL) != 0)) {
-            throw new RuntimeException("Class can't be both final and abstract");
+            throw new ClassParseException("Class can't be both final and abstract");
         }
 
         class_name_index = file.readUnsignedShort();

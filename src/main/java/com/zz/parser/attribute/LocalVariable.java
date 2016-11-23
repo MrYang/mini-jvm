@@ -32,20 +32,8 @@ public class LocalVariable {
         this.constant_pool = constant_pool;
     }
 
-    public int getStartPc() {
-        return start_pc;
-    }
-
     public int getLength() {
         return length;
-    }
-
-    public int getNameIndex() {
-        return name_index;
-    }
-
-    public int getSignatureIndex() {
-        return signature_index;
     }
 
     public String getSignature() {

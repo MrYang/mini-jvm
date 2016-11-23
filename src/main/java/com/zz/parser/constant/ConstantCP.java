@@ -8,13 +8,9 @@ public abstract class ConstantCP extends Constant {
     protected int class_index, name_and_type_index;
 
     public ConstantCP(byte tag, DataInputStream file) throws IOException {
-        this(tag, file.readUnsignedShort(), file.readUnsignedShort());
-    }
-
-    protected ConstantCP(byte tag, int class_index, int name_and_type_index) {
         super(tag);
-        this.class_index = class_index;
-        this.name_and_type_index = name_and_type_index;
+        this.class_index = file.readUnsignedShort();
+        this.name_and_type_index = file.readUnsignedShort();
     }
 
     public int getClassIndex() {
