@@ -13,13 +13,8 @@ public class SourceFile extends Attribute {
 
     SourceFile(int name_index, int length, DataInputStream file,
                ConstantPool constant_pool) throws IOException {
-        this(name_index, length, file.readUnsignedShort(), constant_pool);
-    }
-
-    public SourceFile(int name_index, int length, int sourcefile_index,
-                      ConstantPool constant_pool) {
         super(Constants.ATTR_SOURCE_FILE, name_index, length, constant_pool);
-        this.sourcefile_index = sourcefile_index;
+        this.sourcefile_index = file.readUnsignedShort();
     }
 
     public final String getSourceFileName() {

@@ -17,18 +17,11 @@ public class LocalVariable {
     private ConstantPool constant_pool;
 
     LocalVariable(DataInputStream file, ConstantPool constant_pool) throws IOException {
-        this(file.readUnsignedShort(), file.readUnsignedShort(),
-                file.readUnsignedShort(), file.readUnsignedShort(),
-                file.readUnsignedShort(), constant_pool);
-    }
-
-    LocalVariable(int start_pc, int length, int name_index, int signature_index, int index,
-                  ConstantPool constant_pool) {
-        this.start_pc = start_pc;
-        this.length = length;
-        this.name_index = name_index;
-        this.signature_index = signature_index;
-        this.index = index;
+        this.start_pc = file.readUnsignedShort();
+        this.length = file.readUnsignedShort();
+        this.name_index = file.readUnsignedShort();
+        this.signature_index = file.readUnsignedShort();
+        this.index = file.readUnsignedShort();
         this.constant_pool = constant_pool;
     }
 

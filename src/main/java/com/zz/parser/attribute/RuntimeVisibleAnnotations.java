@@ -14,16 +14,12 @@ public class RuntimeVisibleAnnotations extends Attribute {
     private Annotation[] annoations;
 
     RuntimeVisibleAnnotations(int name_index, int length, DataInputStream file, ConstantPool constant_pool) throws IOException {
-        this(name_index, length, constant_pool);
+        super(Constants.ATTR_RUNTIME_VISIBLE_ANNOTATIONS, name_index, length, constant_pool);
         num_annoations = file.readUnsignedShort();
         annoations = new Annotation[num_annoations];
         for (int i = 0; i < num_annoations; i++) {
             annoations[i] = new Annotation(file);
         }
-    }
-
-    RuntimeVisibleAnnotations(int name_index, int length, ConstantPool constant_pool) {
-        super(Constants.ATTR_RUNTIME_VISIBLE_ANNOTATIONS, name_index, length, constant_pool);
     }
 
     public String toString() {

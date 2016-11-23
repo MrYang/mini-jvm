@@ -14,13 +14,8 @@ public class ConstantValue extends Attribute {
 
     protected ConstantValue(int name_index, int length,
                             DataInputStream file, ConstantPool constant_pool) throws IOException {
-        this(name_index, length, file.readUnsignedShort(), constant_pool);
-    }
-
-    public ConstantValue(int name_index, int length,
-                         int constantvalue_index, ConstantPool constant_pool) throws IOException {
         super(Constants.ATTR_CONSTANT_VALUE, name_index, length, constant_pool);
-        this.constantvalue_index = constantvalue_index;
+        this.constantvalue_index = file.readUnsignedShort();
     }
 
     public final String toString() {

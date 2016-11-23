@@ -11,19 +11,18 @@ public class Deprecated extends Attribute {
 
     private byte[] bytes;
 
-    public Deprecated(int name_index, int length,
-                      ConstantPool constant_pool) {
-        super(Constants.ATTR_DEPRECATED, name_index, length, constant_pool);
-    }
-
     Deprecated(int name_index, int length, DataInputStream file,
                ConstantPool constant_pool) throws IOException {
-        this(name_index, length, constant_pool);
+        super(Constants.ATTR_DEPRECATED, name_index, length, constant_pool);
 
         if (length > 0) {
             bytes = new byte[length];
             file.readFully(bytes);
             System.err.println("Deprecated attribute with length > 0");
         }
+    }
+
+    public byte[] getBytes() {
+        return bytes;
     }
 }

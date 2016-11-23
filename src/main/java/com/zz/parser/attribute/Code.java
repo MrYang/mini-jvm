@@ -24,7 +24,10 @@ public class Code extends Attribute {
     Code(int name_index, int length, DataInputStream file,
          ConstantPool constant_pool) throws IOException {
 
-        this(name_index, length, file.readUnsignedShort(), file.readUnsignedShort(), constant_pool);
+        super(Constants.ATTR_CODE, name_index, length, constant_pool);
+
+        this.max_stack = file.readUnsignedShort();
+        this.max_locals = file.readUnsignedShort();
 
         code_length = file.readInt();
         code = new byte[code_length];
@@ -43,15 +46,6 @@ public class Code extends Attribute {
         }
 
         this.length = length;
-    }
-
-    public Code(int name_index, int length,
-                int max_stack, int max_locals,
-                ConstantPool constant_pool) {
-        super(Constants.ATTR_CODE, name_index, length, constant_pool);
-
-        this.max_stack = max_stack;
-        this.max_locals = max_locals;
     }
 
     public LineNumberTable getLineNumberTable() {
@@ -119,17 +113,11 @@ class CodeException {
     private int catch_type;
 
     public CodeException(DataInputStream file) throws IOException {
-        this(file.readUnsignedShort(), file.readUnsignedShort(),
-                file.readUnsignedShort(), file.readUnsignedShort());
+        this.start_pc = file.readUnsignedShort();
+        this.end_pc = file.readUnsignedShort();
+        this.handler_pc = file.readUnsignedShort();
+        this.catch_type = file.readUnsignedShort();
     }
-
-    public CodeException(int start_pc, int end_pc, int handler_pc, int catch_type) {
-        this.start_pc = start_pc;
-        this.end_pc = end_pc;
-        this.handler_pc = handler_pc;
-        this.catch_type = catch_type;
-    }
-
 
     public int getStartPc() {
         return start_pc;

@@ -12,16 +12,9 @@ public class StackMap extends Attribute {
     private int map_length;
     private StackMapEntry[] map;
 
-
-    public StackMap(int name_index, int length,
-                    ConstantPool constant_pool) {
-        super(Constants.ATTR_STACK_MAP, name_index, length, constant_pool);
-
-    }
-
     StackMap(int name_index, int length, DataInputStream file,
              ConstantPool constant_pool) throws IOException {
-        this(name_index, length, constant_pool);
+        super(Constants.ATTR_STACK_MAP, name_index, length, constant_pool);
 
         map_length = file.readUnsignedShort();
         map = new StackMapEntry[map_length];
@@ -41,7 +34,10 @@ class StackMapEntry {
     private ConstantPool constant_pool;
 
     StackMapEntry(DataInputStream file, ConstantPool constant_pool) throws IOException {
-        this(file.readShort(), file.readShort(), -1, constant_pool);
+        this.byte_code_offset = file.readShort();
+        this.number_of_locals = file.readShort();
+        this.number_of_stack_items = -1;
+        this.constant_pool = constant_pool;
 
         types_of_locals = new StackMapType[number_of_locals];
         for (int i = 0; i < number_of_locals; i++) {
@@ -54,15 +50,6 @@ class StackMapEntry {
             types_of_stack_items[i] = new StackMapType(file, constant_pool);
         }
     }
-
-    public StackMapEntry(int byte_code_offset, int number_of_locals,
-                         int number_of_stack_items,
-                         ConstantPool constant_pool) {
-        this.byte_code_offset = byte_code_offset;
-        this.number_of_locals = number_of_locals;
-        this.number_of_stack_items = number_of_stack_items;
-        this.constant_pool = constant_pool;
-    }
 }
 
 class StackMapType {
@@ -71,17 +58,13 @@ class StackMapType {
     private ConstantPool constant_pool;
 
     StackMapType(DataInputStream file, ConstantPool constant_pool) throws IOException {
-        this(file.readByte(), -1);
+        this.type = file.readByte();
+        this.index = -1;
 
         if (hasIndex()) {
             this.index = file.readShort();
         }
         this.constant_pool = constant_pool;
-    }
-
-    public StackMapType(byte type, int index) {
-        this.type = type;
-        this.index = index;
     }
 
     public final boolean hasIndex() {

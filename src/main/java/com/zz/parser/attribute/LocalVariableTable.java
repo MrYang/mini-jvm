@@ -12,14 +12,9 @@ public class LocalVariableTable extends Attribute {
     private int local_variable_table_length; // Table of local
     private LocalVariable[] local_variable_table;        // variables
 
-    public LocalVariableTable(int name_index, int length, ConstantPool constant_pool) {
-        super(Constants.ATTR_LOCAL_VARIABLE_TABLE, name_index, length, constant_pool);
-    }
-
-
     LocalVariableTable(int name_index, int length, DataInputStream file,
                        ConstantPool constant_pool) throws IOException {
-        this(name_index, length, constant_pool);
+        super(Constants.ATTR_LOCAL_VARIABLE_TABLE, name_index, length, constant_pool);
 
         local_variable_table_length = file.readUnsignedShort();
         local_variable_table = new LocalVariable[local_variable_table_length];

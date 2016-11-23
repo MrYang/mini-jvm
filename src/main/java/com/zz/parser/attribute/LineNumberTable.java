@@ -12,14 +12,9 @@ public class LineNumberTable extends Attribute {
     private int line_number_table_length;
     private LineNumber[] line_number_table;
 
-    public LineNumberTable(int name_index, int length,
-                           ConstantPool constant_pool) {
-        super(Constants.ATTR_LINE_NUMBER_TABLE, name_index, length, constant_pool);
-    }
-
     LineNumberTable(int name_index, int length, DataInputStream file,
                     ConstantPool constant_pool) throws IOException {
-        this(name_index, length, constant_pool);
+        super(Constants.ATTR_LINE_NUMBER_TABLE, name_index, length, constant_pool);
         line_number_table_length = (file.readUnsignedShort());
         line_number_table = new LineNumber[line_number_table_length];
 
