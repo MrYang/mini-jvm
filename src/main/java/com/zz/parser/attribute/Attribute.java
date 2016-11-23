@@ -4,7 +4,6 @@ package com.zz.parser.attribute;
 import com.zz.parser.ClassParseException;
 import com.zz.parser.ConstantPool;
 import com.zz.parser.Constants;
-import com.zz.parser.constant.ConstantUtf8;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -26,9 +25,7 @@ public abstract class Attribute {
     public static Attribute readAttribute(DataInputStream file, ConstantPool constant_pool) throws IOException {
         byte tag = Constants.ATTR_UNKNOWN;
         int name_index = file.readUnsignedShort();
-        ConstantUtf8 c = (ConstantUtf8) constant_pool.getConstant(name_index, Constants.CONSTANT_Utf8);
-        String name = c.getBytes();
-
+        String name = constant_pool.constantToString(name_index, Constants.CONSTANT_Utf8);
         int length = file.readInt();
 
         // Compare strings to find known attribute
@@ -69,8 +66,14 @@ public abstract class Attribute {
                 return new Signature(name_index, length, file, constant_pool);
             case Constants.ATTR_STACK_MAP:
                 return new StackMap(name_index, length, file, constant_pool);
+            case Constants.ATTR_RUNTIME_VISIBLE_ANNOTATIONS:
+                return new RuntimeVisibleAnnotations(name_index, length, file, constant_pool);
             default:
                 throw new ClassParseException("Ooops! default case reached.");
         }
+    }
+
+    public byte getTag() {
+        return tag;
     }
 }

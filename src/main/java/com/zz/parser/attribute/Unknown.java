@@ -1,5 +1,6 @@
 package com.zz.parser.attribute;
 
+import com.sun.org.apache.bcel.internal.classfile.Utility;
 import com.zz.parser.ConstantPool;
 import com.zz.parser.Constants;
 import com.zz.parser.constant.ConstantUtf8;
@@ -33,5 +34,20 @@ public class Unknown extends Attribute {
             bytes = new byte[length];
             file.readFully(bytes);
         }
+    }
+    public final String toString() {
+        if(length == 0 || bytes == null)
+            return "(Unknown attribute " + name + ")";
+
+        String hex;
+        if(length > 10) {
+            byte[] tmp = new byte[10];
+            System.arraycopy(bytes, 0, tmp, 0, 10);
+            hex = Utility.toHexString(tmp) + "... (truncated)";
+        }
+        else
+            hex = Utility.toHexString(bytes);
+
+        return "(Unknown attribute " + name + ": " + hex + ")";
     }
 }

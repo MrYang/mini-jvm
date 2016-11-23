@@ -57,7 +57,7 @@ public class Utility {
      * @return String representation of byte codes
      */
     public static String codeToString(byte[] code, ConstantPool constant_pool,
-                                      int index, int length, boolean verbose){
+                                      int index, int length, boolean verbose) {
 
         StringBuilder buf = new StringBuilder(code.length * 20); // Should be sufficient
         ByteSequence stream = new ByteSequence(code);
@@ -499,7 +499,7 @@ public class Utility {
             throw new ClassParseException("Invalid method signature: " + signature);
         }
 
-        if (buf.length() > 1){
+        if (buf.length() > 1) {
             // Tack off the extra ", "
             buf.setLength(buf.length() - 2);
         }
@@ -620,5 +620,62 @@ public class Utility {
     // 向左移一位
     private static int pow2(int n) {
         return 1 << n;
+    }
+
+    public static String convertString(String label) {
+        char[] ch = label.toCharArray();
+        StringBuilder buf = new StringBuilder();
+
+        for (char c : ch) {
+            switch (c) {
+                case '\n':
+                    buf.append("\\n");
+                    break;
+                case '\r':
+                    buf.append("\\r");
+                    break;
+                case '\"':
+                    buf.append("\\\"");
+                    break;
+                case '\'':
+                    buf.append("\\'");
+                    break;
+                case '\\':
+                    buf.append("\\\\");
+                    break;
+                default:
+                    buf.append(c);
+                    break;
+            }
+        }
+
+        return buf.toString();
+    }
+
+    public static String toHexString(byte[] bytes) {
+        StringBuffer buf = new StringBuffer();
+
+        for(int i=0; i < bytes.length; i++) {
+            short  b   = byteToShort(bytes[i]);
+            String hex = Integer.toString(b, 0x10);
+
+            if(b < 0x10) // just one digit, prepend '0'
+                buf.append('0');
+
+            buf.append(hex);
+
+            if(i < bytes.length - 1)
+                buf.append(' ');
+        }
+
+        return buf.toString();
+    }
+
+    private static final short byteToShort(byte b) {
+        return (b < 0)? (short)(256 + b) : (short)b;
+    }
+
+    public static String classOrInterface(int access_flags) {
+        return ((access_flags & Constants.ACC_INTERFACE) != 0)? "interface" : "class";
     }
 }

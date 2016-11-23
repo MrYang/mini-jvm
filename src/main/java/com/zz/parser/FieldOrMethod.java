@@ -1,7 +1,6 @@
 package com.zz.parser;
 
 import com.zz.parser.attribute.Attribute;
-import com.zz.parser.constant.ConstantUtf8;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -18,6 +17,7 @@ public class FieldOrMethod extends AccessFlags {
         access_flags = file.readUnsignedShort();
         name_index = file.readUnsignedShort();
         signature_index = file.readUnsignedShort();
+        this.constant_pool = constant_pool;
         attributes_count = file.readUnsignedShort();
         attributes = new Attribute[attributes_count];
 
@@ -27,13 +27,11 @@ public class FieldOrMethod extends AccessFlags {
     }
 
     public String getName() {
-        ConstantUtf8 c = (ConstantUtf8) constant_pool.getConstant(name_index, Constants.CONSTANT_Utf8);
-        return c.getBytes();
+        return constant_pool.constantToString(name_index, Constants.CONSTANT_Utf8);
     }
 
     public String getSignature() {
-        ConstantUtf8 c = (ConstantUtf8) constant_pool.getConstant(signature_index, Constants.CONSTANT_Utf8);
-        return c.getBytes();
+        return constant_pool.constantToString(signature_index, Constants.CONSTANT_Utf8);
     }
 
 }

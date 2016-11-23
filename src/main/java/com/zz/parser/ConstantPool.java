@@ -155,4 +155,8 @@ public class ConstantPool {
 
         return buf.toString();
     }
+
+    public int getLength() {
+        return constant_pool_count;
+    }
 }

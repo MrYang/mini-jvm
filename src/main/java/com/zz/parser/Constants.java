@@ -68,15 +68,16 @@ public class Constants {
     public static final byte ATTR_SIGNATURE                               = 10;
     public static final byte ATTR_STACK_MAP                               = 11;
     public static final byte ATTR_LOCAL_VARIABLE_TYPE_TABLE               = 12;
+    public static final byte ATTR_RUNTIME_VISIBLE_ANNOTATIONS             = 13;
 
-    public static final short KNOWN_ATTRIBUTES = 13;
+    public static final short KNOWN_ATTRIBUTES = 14;
 
     public static final String[] ATTRIBUTE_NAMES = {
             "SourceFile", "ConstantValue", "Code", "Exceptions",
             "LineNumberTable", "LocalVariableTable",
             "InnerClasses", "Synthetic", "Deprecated",
             "PMGClass", "Signature", "StackMap",
-            "LocalVariableTypeTable"
+            "LocalVariableTypeTable","RuntimeVisibleAnnotations"
     };
 
     /**
