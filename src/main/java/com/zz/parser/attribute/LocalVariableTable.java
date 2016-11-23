@@ -40,7 +40,7 @@ public class LocalVariableTable extends Attribute {
     }
 
     public final String toString() {
-        StringBuilder buf = new StringBuilder("");
+        StringBuilder buf = new StringBuilder("LocalVariableTable:\n");
 
         for (int i = 0; i < local_variable_table_length; i++) {
             buf.append(local_variable_table[i].toString());

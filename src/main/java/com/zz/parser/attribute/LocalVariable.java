@@ -22,8 +22,7 @@ public class LocalVariable {
                 file.readUnsignedShort(), constant_pool);
     }
 
-    LocalVariable(int start_pc, int length, int name_index,
-                  int signature_index, int index,
+    LocalVariable(int start_pc, int length, int name_index, int signature_index, int index,
                   ConstantPool constant_pool) {
         this.start_pc = start_pc;
         this.length = length;
@@ -50,7 +49,7 @@ public class LocalVariable {
     }
 
     public String getSignature() {
-        return constant_pool.getConstantString(signature_index, Constants.CONSTANT_Utf8);
+        return constant_pool.constantToString(signature_index, Constants.CONSTANT_Utf8);
     }
 
     public int getIndex() {
@@ -58,13 +57,14 @@ public class LocalVariable {
     }
 
     public String getName() {
-        return constant_pool.getConstantString(name_index, Constants.CONSTANT_Utf8);
+        return constant_pool.constantToString(name_index, Constants.CONSTANT_Utf8);
     }
 
     public final String toString() {
-        String name = getName(), signature = Utility.signatureToString(getSignature());
+        String name = getName();
+        String signature = Utility.signatureToString(getSignature());
 
         return "LocalVariable(start_pc = " + start_pc + ", length = " + length +
-                ", index = " + index + ":" + signature + " " + name + ")";
+                ", index = " + index + ", signature = " + signature + ",name = " + name + ")";
     }
 }

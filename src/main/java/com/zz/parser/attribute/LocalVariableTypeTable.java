@@ -27,4 +27,18 @@ public class LocalVariableTypeTable extends Attribute {
             local_variable_type_table[i] = new LocalVariable(file, constant_pool);
         }
     }
+
+    public final String toString() {
+        StringBuilder buf = new StringBuilder("LocalVariableTypeTable:\n");
+
+        for (int i = 0; i < local_variable_type_table_length; i++) {
+            buf.append(local_variable_type_table[i].toString());
+
+            if (i < local_variable_type_table_length - 1) {
+                buf.append('\n');
+            }
+        }
+
+        return buf.toString();
+    }
 }

@@ -65,4 +65,8 @@ class LineNumber {
         this.start_pc = start_pc;
         this.line_number = line_number;
     }
+
+    public final String toString() {
+        return "LineNumber(" + line_number + ": " + start_pc + ")";
+    }
 }
