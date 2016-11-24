@@ -44,8 +44,6 @@ public class Code extends Attribute {
         for (int i = 0; i < attributes_count; i++) {
             attributes[i] = Attribute.readAttribute(file, constant_pool);
         }
-
-        this.length = length;
     }
 
     public LineNumberTable getLineNumberTable() {

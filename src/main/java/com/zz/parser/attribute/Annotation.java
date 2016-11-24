@@ -8,33 +8,11 @@ import com.zz.parser.Utility;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class RuntimeVisibleAnnotations extends Attribute {
+public class Annotation {
 
-    private int num_annoations;
-    private Annotation[] annoations;
-
-    RuntimeVisibleAnnotations(int name_index, int length, DataInputStream file, ConstantPool constant_pool) throws IOException {
-        super(Constants.ATTR_RUNTIME_VISIBLE_ANNOTATIONS, name_index, length, constant_pool);
-        num_annoations = file.readUnsignedShort();
-        annoations = new Annotation[num_annoations];
-        for (int i = 0; i < num_annoations; i++) {
-            annoations[i] = new Annotation(file);
-        }
-    }
-
-    public String toString() {
-        StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < this.annoations.length; ++i) {
-            buf.append(annoations[i].toString(constant_pool)).append(",");
-        }
-        return buf.toString();
-    }
-}
-
-class Annotation {
-    public final int type_index;
-    public final int num_element_value_pairs;
-    public final Annotation.element_value_pair[] element_value_pairs;
+    private int type_index;
+    private int num_element_value_pairs;
+    private Annotation.element_value_pair[] element_value_pairs;
 
     Annotation(DataInputStream file) throws IOException {
         this.type_index = file.readUnsignedShort();
@@ -49,10 +27,8 @@ class Annotation {
     public int length() {
         int length = 4;
         Annotation.element_value_pair[] element_value_pairs = this.element_value_pairs;
-        int pairs_length = element_value_pairs.length;
 
-        for (int i = 0; i < pairs_length; ++i) {
-            Annotation.element_value_pair element_value_pair = element_value_pairs[i];
+        for (Annotation.element_value_pair element_value_pair : element_value_pairs) {
             length += element_value_pair.length();
         }
 
@@ -63,16 +39,16 @@ class Annotation {
         StringBuilder buf = new StringBuilder();
         String type = constant_pool.constantToString(type_index, Constants.CONSTANT_Utf8);
         buf.append("Annotation(").append(Utility.compactClassName(type)).append(")");
-        for (int i = 0; i < this.element_value_pairs.length; ++i) {
-            buf.append(element_value_pairs[i].toString(constant_pool));
+        for (Annotation.element_value_pair element_value_pair : this.element_value_pairs) {
+            buf.append(element_value_pair.toString(constant_pool));
         }
 
         return buf.toString();
     }
 
-    public static class element_value_pair {
-        public final int element_name_index;
-        public final Annotation.element_value value;
+    private static class element_value_pair {
+        private final int element_name_index;
+        final Annotation.element_value value;
 
         element_value_pair(DataInputStream file) throws IOException {
             this.element_name_index = file.readUnsignedShort();
@@ -91,9 +67,9 @@ class Annotation {
         }
     }
 
-    public static class Array_element_value extends Annotation.element_value {
-        public final int num_values;
-        public final Annotation.element_value[] values;
+    private static class Array_element_value extends Annotation.element_value {
+        final int num_values;
+        final Annotation.element_value[] values;
 
         Array_element_value(DataInputStream file, int tag) throws IOException {
             super(tag);
@@ -109,8 +85,8 @@ class Annotation {
         public int length() {
             int length = 2;
 
-            for (int i = 0; i < this.values.length; ++i) {
-                length += this.values[i].length();
+            for (element_value value : this.values) {
+                length += value.length();
             }
 
             return length;
@@ -118,16 +94,16 @@ class Annotation {
 
         public String toString(ConstantPool constant_pool) {
             StringBuilder buf = new StringBuilder();
-            for (int i = 0; i < this.values.length; ++i) {
-                buf.append(values[i].toString(constant_pool)).append(",");
+            for (element_value value : this.values) {
+                buf.append(value.toString(constant_pool)).append(",");
             }
             return buf.toString();
         }
 
     }
 
-    public static class Annotation_element_value extends Annotation.element_value {
-        public final Annotation annotation_value;
+    private static class Annotation_element_value extends Annotation.element_value {
+        final Annotation annotation_value;
 
         Annotation_element_value(DataInputStream file, int tag) throws IOException {
             super(tag);
@@ -143,8 +119,8 @@ class Annotation {
         }
     }
 
-    public static class Class_element_value extends Annotation.element_value {
-        public final int class_info_index;
+    private static class Class_element_value extends Annotation.element_value {
+        final int class_info_index;
 
         Class_element_value(DataInputStream file, int tag) throws IOException {
             super(tag);
@@ -162,9 +138,9 @@ class Annotation {
 
     }
 
-    public static class Enum_element_value extends Annotation.element_value {
-        public final int type_name_index;
-        public final int const_name_index;
+    private static class Enum_element_value extends Annotation.element_value {
+        final int type_name_index;
+        final int const_name_index;
 
         Enum_element_value(DataInputStream file, int tag) throws IOException {
             super(tag);
@@ -184,8 +160,8 @@ class Annotation {
         }
     }
 
-    public static class Primitive_element_value extends Annotation.element_value {
-        public final int const_value_index;
+    private static class Primitive_element_value extends Annotation.element_value {
+        final int const_value_index;
 
         Primitive_element_value(DataInputStream file, int tag) throws IOException {
             super(tag);
@@ -201,10 +177,10 @@ class Annotation {
         }
     }
 
-    public abstract static class element_value {
-        public final int tag;
+    abstract static class element_value {
+        final int tag;
 
-        public static Annotation.element_value read(DataInputStream file) throws IOException {
+        static Annotation.element_value read(DataInputStream file) throws IOException {
             int tag = file.readUnsignedByte();
             switch (tag) {
                 case '@':    // '@'
@@ -230,7 +206,7 @@ class Annotation {
             }
         }
 
-        protected element_value(int tag) {
+        element_value(int tag) {
             this.tag = tag;
         }
 
@@ -239,4 +215,3 @@ class Annotation {
         public abstract String toString(ConstantPool constant_pool);
     }
 }
-

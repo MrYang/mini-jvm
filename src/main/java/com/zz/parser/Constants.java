@@ -70,15 +70,26 @@ public class Constants {
     public static final byte ATTR_STACK_MAP                               = 11;
     public static final byte ATTR_LOCAL_VARIABLE_TYPE_TABLE               = 12;
     public static final byte ATTR_RUNTIME_VISIBLE_ANNOTATIONS             = 13;
+    public static final byte ATTR_RUNTIME_INVISIBLE_ANNOTATIONS           = 14;
+    public static final byte ATTR_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS   = 15;
+    public static final byte ATTR_RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS = 16;
+    // 当且仅当 Class 为局部类或者匿名类时,才能具有 EnclosingMethod 属性
+    public static final byte ATTR_ENCLOSING_METHOD                        = 17;
+    public static final byte ATTR_SOURCE_DEBUG_EXTENSION                  = 18;
+    public static final byte ATTR_ANNOTATION_DEFAULT                      = 19;
+    public static final byte ATTR_BOOTSTRAP_METHODS                       = 20;
 
-    public static final short KNOWN_ATTRIBUTES = 14;
+    public static final short KNOWN_ATTRIBUTES = 21;
 
     public static final String[] ATTRIBUTE_NAMES = {
             "SourceFile", "ConstantValue", "Code", "Exceptions",
             "LineNumberTable", "LocalVariableTable",
             "InnerClasses", "Synthetic", "Deprecated",
             "PMGClass", "Signature", "StackMap",
-            "LocalVariableTypeTable","RuntimeVisibleAnnotations"
+            "LocalVariableTypeTable", "RuntimeVisibleAnnotations",
+            "RuntimeInvisibleAnnotations", "RuntimeVisibleParameterAnnotations",
+            "RuntimeInvisibleParameterAnnotations", "EnclosingMethod",
+            "SourceDebugExtension", "AnnotationDefault", "BootstrapMethods"
     };
 
     /**

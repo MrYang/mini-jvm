@@ -652,30 +652,7 @@ public class Utility {
         return buf.toString();
     }
 
-    public static String toHexString(byte[] bytes) {
-        StringBuffer buf = new StringBuffer();
-
-        for(int i=0; i < bytes.length; i++) {
-            short  b   = byteToShort(bytes[i]);
-            String hex = Integer.toString(b, 0x10);
-
-            if(b < 0x10) // just one digit, prepend '0'
-                buf.append('0');
-
-            buf.append(hex);
-
-            if(i < bytes.length - 1)
-                buf.append(' ');
-        }
-
-        return buf.toString();
-    }
-
-    private static final short byteToShort(byte b) {
-        return (b < 0)? (short)(256 + b) : (short)b;
-    }
-
     public static String classOrInterface(int access_flags) {
-        return ((access_flags & Constants.ACC_INTERFACE) != 0)? "interface" : "class";
+        return ((access_flags & Constants.ACC_INTERFACE) != 0) ? "interface" : "class";
     }
 }

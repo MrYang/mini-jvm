@@ -17,4 +17,7 @@ public class Signature extends Attribute {
         this.signature_index = file.readUnsignedShort();
     }
 
+    public int getSignatureIndex() {
+        return signature_index;
+    }
 }
