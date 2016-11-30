@@ -65,7 +65,7 @@ public class ConstantPool {
         return ((ConstantUtf8) c).getBytes();
     }
 
-    private String constantToString(Constant c) throws ClassParseException {
+    public String constantToString(Constant c) throws ClassParseException {
         String str;
         int idx;
         byte tag = c.getTag();
@@ -150,10 +150,6 @@ public class ConstantPool {
     public String constantToString(int index, byte tag) throws ClassParseException {
         Constant c = getConstant(index, tag);
         return constantToString(c);
-    }
-
-    public int length() {
-        return constant_pool_count;
     }
 
     private String escape(String str) {

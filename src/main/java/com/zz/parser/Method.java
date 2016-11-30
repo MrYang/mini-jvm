@@ -1,14 +1,12 @@
 package com.zz.parser;
 
-import com.zz.parser.attribute.Attribute;
-import com.zz.parser.attribute.Code;
-import com.zz.parser.attribute.ExceptionTable;
-import com.zz.parser.attribute.LineNumberTable;
-import com.zz.parser.attribute.LocalVariableTable;
+import com.zz.parser.attribute.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class Method extends FieldOrMethod {
@@ -55,6 +53,18 @@ public class Method extends FieldOrMethod {
         }
 
         return null;
+    }
+
+    public List<RuntimeAnnotations> getRuntimeAnnotations() {
+        List<RuntimeAnnotations> list = new ArrayList<>();
+        for (int i = 0; i < attributes_count; i++) {
+            Attribute attribute = attributes[i];
+            if (attribute instanceof RuntimeAnnotations) {
+                list.add((RuntimeAnnotations)attribute);
+            }
+        }
+
+        return list;
     }
 
     @Override

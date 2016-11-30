@@ -13,7 +13,14 @@ public class Main {
         JavaClass javaClass = new ClassParser(args[0]).parse();
         System.out.println(javaClass);
         for (Method method : javaClass.getMethods()) {
-            System.out.println(method.getCode());
+            method.getRuntimeAnnotations().forEach(System.out::println);
         }
+
+        ConstantPool constantPool = javaClass.getConstant_pool();
+        for (int i = 1; i < constantPool.getLength(); i++) {
+            System.out.println("#" + i + "=" + constantPool.getConstant(i) + " // " +
+                    constantPool.constantToString(constantPool.getConstant(i)));
+        }
+
     }
 }
